@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 
 import com.google.gson.Gson;
@@ -19,9 +20,18 @@ import com.google.gson.stream.JsonWriter;
 
 public class JsonFileHandler implements MyFileHandler{
 	 JsonReader reader ;
+	 FileWriter f1;
 	 //JsonWriter writer;
 	JsonFileHandler()
-	{
+	{try {
+		 f1=new FileWriter("/Users/coviam/eclipse-workspace/EmployeeManagement/src/model/employee1.json",true);
+		 f1.write("[]");
+		 f1.close();
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	
 		   try {
 		    	FileInputStream geek = new FileInputStream("/Users/coviam/eclipse-workspace/EmployeeManagement/src/model/employee.json");
 		//     	FileOutputStream geek1= new FileOutputStream("/Users/coviam/eclipse-workspace/EmployeeManagement/src/model/employee.json");
@@ -72,13 +82,21 @@ public class JsonFileHandler implements MyFileHandler{
 	public void write(Employee data) {
 		// TODO Auto-generated method stub
 		try {
-			FileWriter f1=new FileWriter("/Users/coviam/eclipse-workspace/EmployeeManagement/src/model/employee1.json",true);
+			 f1=new FileWriter("/Users/coviam/eclipse-workspace/EmployeeManagement/src/model/employee1.json",true);
+
 			JsonObject j1=new JsonObject();
 			j1.addProperty("firstName",data.getFirstName());
 			j1.addProperty("lastName", data.getLastName());
 			//j1.addProperty("dateOfBirth", data.getDateOfBirth().toString());
 			//j1.addProperty("experience", data.getExperience());
-			f1.write(j1.toString());
+			System.out.println(j1.toString());
+			RandomAccessFile file=new RandomAccessFile("/Users/coviam/eclipse-workspace/EmployeeManagement/src/model/employee1.json", "rw");
+			long l=file.length();
+			file.setLength(l-1);
+			file.close();
+			f1.write("\b");
+			f1.write(j1.toString()+",]");
+			f1.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

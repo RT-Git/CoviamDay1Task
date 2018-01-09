@@ -18,39 +18,41 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 
 public class temp {
-	
-	public static void readStream() {
-	    try {
-	    	FileInputStream geek = new FileInputStream("/Users/coviam/eclipse-workspace/EmployeeManagement/src/model/employee.json");
-	    	 
-	        JsonReader reader = new JsonReader(new InputStreamReader(geek));
-	        Gson gson = new GsonBuilder()
-	 			   .setDateFormat("MM/dd/yy").create();
 
-	        // Read file in stream mode
-	        reader.beginArray();
-	        while (reader.hasNext()) {
-	            // Read data into object model
-	            Employee person = gson.fromJson(reader, Employee.class);
-	            System.out.println(person.firstName);
-	       break;
-	        }
-	        reader.close();
-	    } catch (UnsupportedEncodingException ex) {
-	       
-	    } catch (IOException ex) {
-	       
-	    }
+	public static void readStream() {
+		try {
+			FileInputStream geek = new FileInputStream(
+					"/Users/coviam/eclipse-workspace/EmployeeManagement/src/model/employee.json");
+
+			JsonReader reader = new JsonReader(new InputStreamReader(geek));
+			Gson gson = new GsonBuilder().setDateFormat("MM/dd/yy").create();
+
+			// Read file in stream mode
+			reader.beginArray();
+			while (reader.hasNext()) {
+				// Read data into object model
+				Employee person = gson.fromJson(reader, Employee.class);
+				System.out.println(person.firstName);
+				break;
+			}
+			reader.close();
+		} catch (UnsupportedEncodingException ex) {
+
+		} catch (IOException ex) {
+
+		}
 	}
-public static void main(String[] args) {
-JsonFileHandler j=new JsonFileHandler();
-for(int i=0;i<10;i++)
-{
-j.read();	
-}
-Employee e=new Employee();
-e.setFirstName("viral");
-e.setLastName("shah");
-j.write(e);
-}
+
+	public static void main(String[] args) {
+		JsonFileHandler j = new JsonFileHandler();
+		for (int i = 0; i < 10; i++) {
+			j.read();
+		}
+		Employee e = new Employee();
+		e.setFirstName("viral");
+		e.setLastName("shah");
+		j.write(e);
+		j.write(e);
+		
+	}
 }
