@@ -8,6 +8,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -20,27 +22,18 @@ import com.google.gson.stream.JsonWriter;
 
 public class JsonFileHandler implements MyFileHandler{
 	 JsonReader reader ;
-	 FileWriter f1;
-	 //JsonWriter writer;
+	 FileWriter fileWriter;
+	 String path;
 	JsonFileHandler()
-	{try {
-		 f1=new FileWriter("/Users/coviam/eclipse-workspace/EmployeeManagement/src/model/employee1.json",true);
-		 f1.write("[]");
-		 f1.close();
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
+	{
+		path="/Users/coviam/eclipse-workspace/EmployeeManagement/src/model/employee.json";
+		
 	
 		   try {
-		    	FileInputStream geek = new FileInputStream("/Users/coviam/eclipse-workspace/EmployeeManagement/src/model/employee.json");
-		//     	FileOutputStream geek1= new FileOutputStream("/Users/coviam/eclipse-workspace/EmployeeManagement/src/model/employee.json");
-		//		    	writer= new JsonWriter(new OutputStreamWriter(geek1));
+		    	FileInputStream geek = new FileInputStream(path);
 		         reader = new JsonReader(new InputStreamReader(geek));
 		        Gson gson = new GsonBuilder()
 		 			   .setDateFormat("MM/dd/yy").create();
-//writer.beginArray();
-		        // Read file in stream mode
 		        reader.beginArray();
 		      
 		   } catch (UnsupportedEncodingException ex) {
@@ -82,22 +75,23 @@ public class JsonFileHandler implements MyFileHandler{
 	public void write(Employee data) {
 		// TODO Auto-generated method stub
 		try {
-			 f1=new FileWriter("/Users/coviam/eclipse-workspace/EmployeeManagement/src/model/employee1.json",true);
+			fileWriter=new FileWriter(path,true);
 
-			JsonObject j1=new JsonObject();
-			j1.addProperty("firstName",data.getFirstName());
-			j1.addProperty("lastName", data.getLastName());
-			//j1.addProperty("dateOfBirth", data.getDateOfBirth().toString());
-			//j1.addProperty("experience", data.getExperience());
-			System.out.println(j1.toString());
-			RandomAccessFile file=new RandomAccessFile("/Users/coviam/eclipse-workspace/EmployeeManagement/src/model/employee1.json", "rw");
+			JsonObject jsonObj=new JsonObject();
+			jsonObj.addProperty("firstName",data.getFirstName());
+			jsonObj.addProperty("lastName", data.getLastName());
+			DateFormat dateFormat = new SimpleDateFormat("MM/dd/yy");
+             String strDate = dateFormat.format(data.getDateOfBirth());
+			jsonObj.addProperty("dateOfBirth", strDate);
+			jsonObj.addProperty("experience", ((int)(data.getExperience())));
+			RandomAccessFile file=new RandomAccessFile(path, "rw");
 			long l=file.length();
 			file.setLength(l-1);
 			file.close();
-			f1.write("\b");
-			f1.write(j1.toString()+",]");
-			f1.close();
+			fileWriter.write(","+jsonObj.toString()+"]");
+			fileWriter.close();
 		} catch (IOException e) {
+			
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
